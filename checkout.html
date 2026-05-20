@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Stonebridge Bay RP</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏙️</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- PayPal SDK — CLIENT ID reale -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AVHw83IhFaEJ4DRH9t2MkwzN8LlRVp6tBVzjMqZjOIOFbkPUBWDNi6gBDAxuk058kBpBxdLfd6MzWd6p&currency=EUR"></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo">
+    <span style="font-size:1.8rem;filter:drop-shadow(0 0 8px #00f5ff)">🏙️</span>
+    <span>STONEBRIDGE <em>BAY</em></span>
+  </a>
+  <div class="navbar-actions">
+    <a href="index.html" class="btn btn-neon">← Torna allo shop</a>
+    <button class="cart-btn" onclick="openCart()" title="Apri carrello">
+      🛒 <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- CHECKOUT PAGE -->
+<main class="checkout-page">
+
+  <!-- Titolo pagina -->
+  <div style="max-width:860px;margin:0 auto 1.5rem;">
+    <span style="font-family:var(--font-mono);font-size:.75rem;letter-spacing:3px;color:var(--neon-pink);text-transform:uppercase;">
+      Passo 1 di 1
+    </span>
+    <h1 style="font-family:var(--font-head);font-size:2.5rem;letter-spacing:3px;color:#fff;margin-top:.3rem;">
+      CHECKOUT
+    </h1>
+  </div>
+
+  <div class="checkout-container">
+
+    <!-- ── Riepilogo carrello ── -->
+    <div class="checkout-panel">
+      <h2>🛒 RIEPILOGO ORDINE</h2>
+
+      <!-- Messaggio carrello vuoto -->
+      <div id="checkout-empty" style="display:none;text-align:center;padding:2rem;color:var(--text-muted);">
+        <span style="font-size:3rem;display:block;margin-bottom:1rem">🛒</span>
+        <p>Il carrello è vuoto.</p>
+        <a href="index.html#shop" class="btn btn-neon" style="margin-top:1rem;">Vai allo shop</a>
+      </div>
+
+      <!-- Lista prodotti -->
+      <div id="checkout-items"></div>
+
+      <!-- Subtotale / Totale -->
+      <div id="paypal-block" style="display:none;">
+        <div class="checkout-summary-row" style="margin-top:1.2rem;">
+          <span>Subtotale</span>
+          <span id="checkout-subtotal">€0.00</span>
+        </div>
+        <div class="checkout-summary-row">
+          <span>Commissioni</span>
+          <span style="color:var(--neon-cyan);">Gratis</span>
+        </div>
+        <div class="checkout-total-row">
+          <span class="checkout-total-label">TOTALE</span>
+          <span class="checkout-total-value" id="checkout-total">€0.00</span>
+        </div>
+      </div>
+
+    </div><!-- /checkout-panel -->
+
+    <!-- ── Pannello pagamento ── -->
+    <div class="checkout-panel">
+      <h2>💳 PAGAMENTO</h2>
+
+      <div id="paypal-block-payment" style="display:none;">
+        <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.5rem;">
+          Pagamento sicuro tramite PayPal. Sono accettati carta di credito, debito e conto PayPal.
+        </p>
+
+        <!-- PayPal Buttons container -->
+        <div class="paypal-container" id="paypal-button-container"></div>
+
+        <div class="secure-badge">
+          🔒 Transazione protetta da PayPal
+        </div>
+
+        <!-- Pulsante fallback manuale -->
+        <div style="margin-top:1.2rem;text-align:center;">
+          <button class="btn btn-neon btn-full" onclick="svuotaCarrello()" style="margin-top:.5rem;font-size:.85rem;opacity:.7;">
+            🗑️ Svuota carrello
+          </button>
+        </div>
+      </div>
+
+      <!-- Messaggio se carrello vuoto -->
+      <div id="payment-empty-msg" style="text-align:center;padding:2rem;color:var(--text-muted);">
+        <p>Aggiungi prodotti al carrello per procedere.</p>
+        <a href="index.html#shop" class="btn btn-neon" style="margin-top:1rem;">
+          🛍️ Vai allo shop
+        </a>
+      </div>
+
+    </div><!-- /checkout-panel pagamento -->
+
+  </div><!-- /checkout-container -->
+</main>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cart-overlay"></div>
+<aside class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer-header">
+    <h3>🛒 CARRELLO</h3>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">TOTALE</span>
+      <span class="cart-total-amount" id="cart-total">€0.00</span>
+    </div>
+  </div>
+</aside>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-bottom" style="max-width:860px;margin:0 auto;">
+    <span class="footer-copy">© 2025 Stonebridge Bay RP</span>
+    <span class="footer-disclaimer">Pagamento sicuro tramite PayPal</span>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="script.js"></script>
+<script>
+/**
+ * Inizializzazione PayPal Checkout
+ * Viene eseguita dopo che script.js ha caricato il carrello.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Piccolo ritardo per assicurarsi che script.js abbia fatto il render
+  setTimeout(initPayPal, 50);
+});
+
+function svuotaCarrello() {
+  if (confirm('Sei sicuro di voler svuotare il carrello?')) {
+    clearCart();
+    location.reload();
+  }
+}
+
+function initPayPal() {
+  const total = getCartTotal();
+
+  // Mostra/nasconde sezioni in base al carrello
+  const hasItems = cart.length > 0;
+
+  document.getElementById('paypal-block').style.display        = hasItems ? 'block' : 'none';
+  document.getElementById('paypal-block-payment').style.display = hasItems ? 'block' : 'none';
+  document.getElementById('payment-empty-msg').style.display    = hasItems ? 'none'  : 'block';
+  document.getElementById('checkout-empty').style.display       = hasItems ? 'none'  : 'block';
+
+  // Aggiorna subtotale
+  const sub = document.getElementById('checkout-subtotal');
+  if (sub) sub.textContent = `€${total.toFixed(2)}`;
+
+  if (!hasItems) return;
+
+  // Renderizza i pulsanti PayPal
+  paypal.Buttons({
+
+    style: {
+      layout:  'vertical',
+      color:   'gold',
+      shape:   'rect',
+      label:   'pay',
+      height:  45
+    },
+
+    // Crea l'ordine PayPal con il totale del carrello
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          description: 'Stonebridge Bay RP — Acquisto Shop',
+          amount: {
+            currency_code: 'EUR',
+            value: getCartTotal().toFixed(2),
+            breakdown: {
+              item_total: {
+                currency_code: 'EUR',
+                value: getCartTotal().toFixed(2)
+              }
+            }
+          },
+          // Dettaglio articoli
+          items: cart.map(item => ({
+            name:        item.name.substring(0, 127),
+            unit_amount: { currency_code: 'EUR', value: item.price.toFixed(2) },
+            quantity:    String(item.qty),
+            category:    'DIGITAL_GOODS'
+          }))
+        }]
+      });
+    },
+
+    // Pagamento approvato → cattura e redirect a success
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(orderData) {
+        // Salva i dettagli ordine in sessionStorage per la pagina success
+        sessionStorage.setItem('sbbRP_order', JSON.stringify({
+          id:     orderData.id,
+          status: orderData.status,
+          payer:  orderData.payer,
+          total:  getCartTotal().toFixed(2),
+          items:  cart.map(i => ({ name: i.name, qty: i.qty, price: i.price }))
+        }));
+        // Svuota carrello dopo pagamento riuscito
+        clearCart();
+        // Redirect
+        window.location.href = 'success.html';
+      });
+    },
+
+    // Pagamento annullato dall'utente
+    onCancel: function(data) {
+      window.location.href = 'cancel.html';
+    },
+
+    // Errore PayPal
+    onError: function(err) {
+      console.error('PayPal error:', err);
+      showToast('❌ Errore durante il pagamento. Riprova.', 'error');
+    }
+
+  }).render('#paypal-button-container');
+}
+</script>
+</body>
+</html>

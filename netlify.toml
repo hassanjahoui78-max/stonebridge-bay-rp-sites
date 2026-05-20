@@ -1,0 +1,24 @@
+# ─────────────────────────────────────────────────
+# netlify.toml — Configurazione Netlify
+# Stonebridge Bay RP
+# ─────────────────────────────────────────────────
+
+[build]
+  publish = "."     # cartella radice del sito
+
+# ── Redirect pagina 404 custom ──
+[[redirects]]
+  from   = "/*"
+  to     = "/404.html"
+  status = 404
+
+# ── Header di sicurezza ──
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-XSS-Protection       = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+    # Content Security Policy — permette PayPal SDK e Google Fonts
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.paypal.com https://www.paypalobjects.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.paypal.com https://www.sandbox.paypal.com; frame-src https://www.paypal.com https://www.sandbox.paypal.com;"

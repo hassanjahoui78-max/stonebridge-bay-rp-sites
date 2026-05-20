@@ -1,0 +1,260 @@
+/* ============================================================
+   STONEBRIDGE BAY RP — success.css
+   Stili dedicati: pagina successo + documento licenza
+   ============================================================ */
+
+/* ── Confetti ── */
+@keyframes confettiFall {
+  0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+.confetti-piece {
+  position: fixed;
+  border-radius: 2px;
+  animation: confettiFall linear forwards;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ── Riquadri dettagli ordine ── */
+.order-details {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: 1.2rem 0;
+  text-align: left;
+  width: 100%;
+}
+
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .55rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: .9rem;
+  gap: 1rem;
+}
+.order-row:last-child { border-bottom: none; }
+
+.order-row .label {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: .73rem;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+.order-row .value {
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+  text-align: right;
+  word-break: break-all;
+}
+
+/* ── Box input Discord ID ── */
+.discord-input-box {
+  background: var(--bg-card);
+  border: 1px solid rgba(0, 245, 255, .3);
+  border-radius: 10px;
+  padding: 1.4rem 1.5rem;
+  margin: 1.2rem 0;
+  text-align: left;
+  width: 100%;
+  transition: border-color .25s;
+}
+.discord-input-box:focus-within {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 245, 255, .08);
+}
+
+.discord-input-box label {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: 3px;
+  color: var(--neon-cyan);
+  text-transform: uppercase;
+  margin-bottom: .75rem;
+}
+
+.discord-input-box input {
+  width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--neon-yellow);
+  font-family: var(--font-mono);
+  font-size: .95rem;
+  padding: .65rem 1rem;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  letter-spacing: 1.5px;
+}
+.discord-input-box input:focus {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 0 3px rgba(0, 245, 255, .1);
+}
+.discord-input-box input::placeholder {
+  color: var(--text-muted);
+  font-size: .82rem;
+  letter-spacing: .5px;
+}
+
+.input-hint {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  color: var(--text-muted);
+  margin-top: .55rem;
+  line-height: 1.6;
+}
+
+/* ── Anteprima licenza ── */
+.license-preview-section {
+  width: 100%;
+  margin: .5rem 0;
+}
+
+.license-preview-label {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: 3px;
+  color: var(--neon-pink);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: .6rem;
+}
+
+.license-preview {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  font-family: var(--font-mono);
+  font-size: .8rem;
+}
+
+.lp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .32rem 0;
+  gap: 1rem;
+}
+.lp-row + .lp-row { border-top: 1px solid rgba(255,255,255,.04); }
+
+.lp-key {
+  color: var(--text-muted);
+  font-size: .7rem;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+.lp-val {
+  color: var(--neon-yellow);
+  text-align: right;
+  word-break: break-all;
+  font-size: .8rem;
+}
+.lp-val.code-big {
+  color: var(--neon-cyan);
+  font-size: .88rem;
+  letter-spacing: 2.5px;
+  text-shadow: 0 0 12px rgba(0, 245, 255, .5);
+}
+
+.lp-divider {
+  height: 1px;
+  background: var(--border);
+  margin: .4rem 0;
+}
+
+/* ── Bottone download licenza ── */
+.btn-license {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  background: linear-gradient(135deg, #00f5ff 0%, #0099cc 100%);
+  color: #000;
+  border: none;
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: .9rem 2.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+  box-shadow: 0 0 22px rgba(0, 245, 255, .45);
+  margin-top: 1rem;
+  width: 100%;
+  text-decoration: none;
+}
+.btn-license:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 38px rgba(0, 245, 255, .65);
+}
+.btn-license:active {
+  transform: translateY(0);
+}
+
+.license-save-hint {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  color: var(--text-muted);
+  margin-top: .6rem;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── Animazione comparsa sezione licenza ── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.license-preview-section {
+  animation: fadeSlideUp .35s ease both;
+}
+
+/* ── Divisore neon ── */
+.neon-divider-success {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,245,255,.3), transparent);
+  margin: 1.6rem 0;
+  width: 100%;
+}
+
+
+/* ============================================================
+   DOCUMENTO LICENZA (file scaricato: licenza-SBBR-*.html)
+   Questi stili vengono iniettati inline nel documento generato.
+   ============================================================ */
+
+/*
+  Nota: i seguenti stili sono usati come template string in script.
+  Sono documentati qui come riferimento per il design del documento.
+
+  Palette documento:
+    bg principale:  #050709
+    bg card:        #0d1117
+    accent cyan:    #00f5ff
+    accent pink:    #ff2d78
+    accent yellow:  #f5c400
+    testo:          #e8eaf0
+    testo muted:    #6b7280
+    successo:       #4ade80
+
+  Font: Bebas Neue (header), Share Tech Mono (codici/label), Rajdhani (body)
+
+  Layout: singola "card" centrata con:
+    - Header: logo + badge VALIDA
+    - Body: 2 tabelle (acquisto + proprietario) + box codice
+    - Footer: istruzioni staff
+    - Watermark diagonale semitrasparente
+
+  Print media: converte in bianco/nero automaticamente
+*/

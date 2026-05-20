@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pagamento Riuscito — Stonebridge Bay RP</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="success.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-logo">
+    <span style="font-size:1.8rem;filter:drop-shadow(0 0 8px #00f5ff)">🏙️</span>
+    <span>STONEBRIDGE <em>BAY</em></span>
+  </a>
+</nav>
+
+<main class="status-page status-success">
+  <div class="hero-bg" style="position:fixed;"></div>
+
+  <div class="status-content" style="max-width:600px;width:100%;">
+
+    <span class="status-icon">✅</span>
+    <h1 class="status-title">PAGAMENTO<br>RIUSCITO!</h1>
+    <p class="status-message">
+      Grazie per il tuo acquisto! I benefici verranno attivati entro
+      <strong style="color:var(--neon-yellow);">24 ore</strong>.
+    </p>
+
+    <!-- Dettagli ordine PayPal -->
+    <div class="order-details" id="order-details" style="display:none;">
+      <div class="order-row">
+        <span class="label">ORDER ID</span>
+        <span class="value" id="order-id">—</span>
+      </div>
+      <div class="order-row">
+        <span class="label">TOTALE PAGATO</span>
+        <span class="value" id="order-total">—</span>
+      </div>
+      <div class="order-row">
+        <span class="label">STATO</span>
+        <span class="value" style="color:#4ade80;">COMPLETATO ✓</span>
+      </div>
+    </div>
+
+    <!-- Lista prodotti acquistati -->
+    <div class="order-details" id="order-items-box" style="display:none;">
+      <div style="font-family:var(--font-mono);font-size:.7rem;letter-spacing:2px;color:var(--neon-pink);margin-bottom:.8rem;">
+        PRODOTTI ACQUISTATI
+      </div>
+      <div id="order-items-list"></div>
+    </div>
+
+    <hr class="neon-divider-success" />
+
+    <!-- ════════════════════════════════
+         SEZIONE SCARICA LICENZA
+    ═════════════════════════════════ -->
+
+    <!-- 1. Input Discord ID -->
+    <div class="discord-input-box">
+      <label>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#5865F2">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+        </svg>
+        Inserisci il tuo Discord ID
+      </label>
+      <input
+        type="text"
+        id="discord-id-input"
+        placeholder="Es: 123456789012345678"
+        maxlength="22"
+        oninput="onDiscordInput()"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <p class="input-hint">
+        💡 Discord → Impostazioni → Avanzate → attiva <em>Modalità sviluppatore</em>
+        → tasto destro sul tuo nome → Copia ID utente
+      </p>
+    </div>
+
+    <!-- 2. Anteprima licenza (appare mentre l'utente scrive) -->
+    <div class="license-preview-section" id="license-preview-section" style="display:none;">
+      <span class="license-preview-label">⬇ Anteprima licenza</span>
+      <div class="license-preview">
+        <div class="lp-row">
+          <span class="lp-key">Prodotto</span>
+          <span class="lp-val" id="lp-product">—</span>
+        </div>
+        <div class="lp-row">
+          <span class="lp-key">Discord ID</span>
+          <span class="lp-val" id="lp-discord">—</span>
+        </div>
+        <div class="lp-row">
+          <span class="lp-key">Order ID</span>
+          <span class="lp-val" id="lp-order">—</span>
+        </div>
+        <div class="lp-row">
+          <span class="lp-key">Data</span>
+          <span class="lp-val" id="lp-date">—</span>
+        </div>
+        <div class="lp-divider"></div>
+        <div class="lp-row">
+          <span class="lp-key">Codice Licenza</span>
+          <span class="lp-val code-big" id="lp-code">—</span>
+        </div>
+      </div>
+
+      <!-- 3. Bottone scarica -->
+      <button class="btn-license" id="btn-license" onclick="downloadLicense()">
+        📄 Scarica Licenza
+      </button>
+      <p class="license-save-hint">
+        Salva il file e aprilo nel browser · puoi stamparlo come PDF<br>
+        Serve per aprire un ticket staff e attivare i benefici
+      </p>
+    </div>
+
+    <hr class="neon-divider-success" />
+
+    <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem;">
+      Problemi? Contattaci su
+      <a href="https://discord.gg/tonycodelink" style="color:var(--neon-cyan);">Discord</a>.
+    </p>
+
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="index.html" class="btn btn-neon btn-lg">🏠 Home</a>
+      <a href="https://discord.gg/tonycodelink" target="_blank" class="btn btn-discord btn-lg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+        </svg>
+        Vai su Discord
+      </a>
+    </div>
+
+  </div><!-- /status-content -->
+</main>
+
+<div class="toast-container" id="toast-container"></div>
+<script src="script.js"></script>
+<script>
+/* ─────────────────────────────────────────────────────
+   STATO
+───────────────────────────────────────────────────── */
+let orderData   = null;
+let licenseCode = '';   // generato UNA SOLA VOLTA al caricamento pagina
+
+/* ─────────────────────────────────────────────────────
+   GENERA CODICE UNIVOCO
+   Formato: SBBR-XXXX-XXXX-XXXX-XXXX  (hex crypto random)
+   Cambia ad ogni caricamento della pagina success.html
+───────────────────────────────────────────────────── */
+function generateCode() {
+  const buf = new Uint8Array(8);
+  crypto.getRandomValues(buf);
+  const h = Array.from(buf)
+    .map(b => b.toString(16).padStart(2, '0').toUpperCase())
+    .join('');
+  return `SBBR-${h.slice(0,4)}-${h.slice(4,8)}-${h.slice(8,12)}-${h.slice(12,16)}`;
+}
+
+/* ─────────────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  // Genera il codice subito: è univoco per questo acquisto
+  licenseCode = generateCode();
+
+  // Carica dati ordine da sessionStorage (messi da checkout.html)
+  const raw = sessionStorage.getItem('sbbRP_order');
+  if (raw) {
+    try {
+      orderData = JSON.parse(raw);
+
+      document.getElementById('order-details').style.display = 'block';
+      document.getElementById('order-id').textContent    = orderData.id    || '—';
+      document.getElementById('order-total').textContent = `€${orderData.total}`;
+
+      if (orderData.items?.length > 0) {
+        document.getElementById('order-items-box').style.display = 'block';
+        document.getElementById('order-items-list').innerHTML =
+          orderData.items.map(i => `
+            <div class="order-row">
+              <span class="label">${esc(i.name)} x${i.qty}</span>
+              <span class="value">€${(i.price * i.qty).toFixed(2)}</span>
+            </div>`
+          ).join('');
+      }
+
+      sessionStorage.removeItem('sbbRP_order');
+    } catch(e) {}
+  } else {
+    // Accesso diretto (demo / test)
+    orderData = {
+      id:    'DEMO-' + Math.random().toString(36).slice(2,10).toUpperCase(),
+      total: '0.00',
+      items: [{ name: 'Demo Prodotto', qty: 1, price: 0 }]
+    };
+  }
+
+  confetti();
+});
+
+/* ─────────────────────────────────────────────────────
+   INPUT DISCORD ID → aggiorna anteprima in tempo reale
+───────────────────────────────────────────────────── */
+function onDiscordInput() {
+  const id  = document.getElementById('discord-id-input').value.trim();
+  const box = document.getElementById('license-preview-section');
+
+  if (id.length < 6) { box.style.display = 'none'; return; }
+
+  box.style.display = 'block';
+
+  const products = orderData?.items
+    ? orderData.items.map(i => `${i.name}${i.qty > 1 ? ' ×'+i.qty : ''}`).join(', ')
+    : 'N/D';
+
+  const orderId = orderData?.id || 'N/D';
+  const dateStr = new Date().toLocaleString('it-IT', {
+    day:'2-digit', month:'2-digit', year:'numeric',
+    hour:'2-digit', minute:'2-digit'
+  });
+
+  document.getElementById('lp-product').textContent = products;
+  document.getElementById('lp-discord').textContent  = id;
+  document.getElementById('lp-order').textContent    = orderId;
+  document.getElementById('lp-date').textContent     = dateStr;
+  document.getElementById('lp-code').textContent     = licenseCode;
+}
+
+/* ─────────────────────────────────────────────────────
+   GENERA E SCARICA IL FILE LICENZA HTML
+───────────────────────────────────────────────────── */
+function downloadLicense() {
+  const discordId = document.getElementById('discord-id-input').value.trim();
+  if (discordId.length < 6) {
+    showToast('⚠️ Inserisci il tuo Discord ID prima di scaricare', 'warn');
+    return;
+  }
+
+  const products = orderData?.items
+    ? orderData.items.map(i => `${i.name}${i.qty > 1 ? ' ×'+i.qty : ''}`).join(', ')
+    : 'N/D';
+  const total   = orderData ? `€${orderData.total}` : '€0.00';
+  const orderId = orderData?.id || 'N/D';
+  const dateStr = new Date().toLocaleString('it-IT', {
+    day:'2-digit', month:'2-digit', year:'numeric',
+    hour:'2-digit', minute:'2-digit', second:'2-digit'
+  });
+
+  /* ── Template HTML del documento licenza ─────────────────── */
+  const doc = `<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"/>
+<title>Licenza Stonebridge Bay RP — ${licenseCode}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@500;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:#050709;
+  color:#e8eaf0;
+  font-family:'Rajdhani',sans-serif;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+}
+
+/* sfondo griglia neon */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,245,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,245,255,.03) 1px,transparent 1px);
+  background-size:50px 50px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* watermark diagonale */
+.wm{
+  position:fixed;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(-28deg);
+  font-family:'Bebas Neue',sans-serif;
+  font-size:5.5rem;letter-spacing:8px;
+  color:rgba(0,245,255,.028);
+  white-space:nowrap;pointer-events:none;
+  user-select:none;z-index:0;
+}
+
+.card{
+  background:#0d1117;
+  border:2px solid #00f5ff;
+  border-radius:14px;
+  max-width:700px;width:100%;
+  position:relative;z-index:1;
+  box-shadow:
+    0 0 0 1px rgba(0,245,255,.08),
+    0 0 40px rgba(0,245,255,.2),
+    0 0 80px rgba(0,245,255,.07),
+    0 24px 60px rgba(0,0,0,.6);
+  overflow:hidden;
+}
+
+/* ── HEADER ── */
+.hd{
+  background:linear-gradient(135deg,#060c14 0%,#0b1825 100%);
+  border-bottom:2px solid #00f5ff;
+  padding:1.8rem 2.4rem 1.5rem;
+  position:relative;
+}
+.hd::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,#00f5ff 40%,#ff2d78 60%,transparent);
+  opacity:.6;
+}
+.logo-row{display:flex;align-items:center;gap:.85rem;}
+.logo-icon{font-size:2.4rem;line-height:1;}
+.logo-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem;letter-spacing:3px;
+  color:#00f5ff;
+  text-shadow:0 0 22px rgba(0,245,255,.7);
+  line-height:1;
+}
+.logo-name em{color:#ff2d78;font-style:normal;}
+.logo-sub{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.65rem;letter-spacing:4px;
+  color:rgba(0,245,255,.5);
+  margin-top:.15rem;
+  display:block;
+}
+.badge-ok{
+  position:absolute;top:1.6rem;right:2.2rem;
+  background:rgba(74,222,128,.1);
+  border:1.5px solid #4ade80;
+  color:#4ade80;
+  font-family:'Share Tech Mono',monospace;
+  font-size:.68rem;letter-spacing:2px;
+  padding:.3rem .85rem;border-radius:4px;
+  text-transform:uppercase;
+}
+
+/* ── BODY ── */
+.bd{padding:2rem 2.4rem;}
+
+.sec-lbl{
+  display:block;
+  font-family:'Share Tech Mono',monospace;
+  font-size:.62rem;letter-spacing:4px;
+  color:#ff2d78;text-transform:uppercase;
+  margin-bottom:.7rem;margin-top:1.4rem;
+}
+.sec-lbl:first-child{margin-top:0;}
+
+table{width:100%;border-collapse:collapse;}
+td{
+  padding:.52rem .5rem;
+  font-size:.93rem;
+  vertical-align:top;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+tr:last-child td{border-bottom:none;}
+td.k{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.68rem;letter-spacing:1px;
+  color:#6b7280;text-transform:uppercase;
+  width:38%;padding-right:1rem;white-space:nowrap;
+}
+td.v{color:#e8eaf0;font-weight:600;}
+
+/* ── CODICE LICENZA ── */
+.code-box{
+  background:#050a0d;
+  border:2px solid rgba(0,245,255,.5);
+  border-radius:10px;
+  padding:1.3rem 1.6rem;
+  margin:1.4rem 0;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.code-box::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,245,255,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.code-box .cl{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.62rem;letter-spacing:4px;
+  color:rgba(0,245,255,.5);
+  display:block;margin-bottom:.6rem;
+  text-transform:uppercase;
+}
+.code-box .cv{
+  font-family:'Share Tech Mono',monospace;
+  font-size:1.55rem;letter-spacing:5px;
+  color:#00f5ff;
+  text-shadow:0 0 22px rgba(0,245,255,.75),0 0 6px rgba(0,245,255,.4);
+  word-break:break-all;
+  position:relative;z-index:1;
+}
+
+/* ── FOOTER ── */
+.ft{
+  background:#060c10;
+  border-top:1px solid rgba(0,245,255,.12);
+  padding:1.1rem 2.4rem;
+  font-family:'Share Tech Mono',monospace;
+  font-size:.65rem;color:#384050;line-height:1.8;
+}
+.ft strong{color:rgba(0,245,255,.35);}
+.ft a{color:rgba(0,245,255,.4);text-decoration:none;}
+
+/* ── PRINT ── */
+@media print{
+  body{background:#fff;color:#000;}
+  body::after{display:none;}
+  .wm{color:rgba(0,0,0,.03);}
+  .card{background:#fff;border-color:#222;box-shadow:none;}
+  .hd{background:#f4f4f4;border-color:#222;}
+  .hd::after{display:none;}
+  .logo-name{color:#000;text-shadow:none;}
+  .logo-name em{color:#cc0044;}
+  .badge-ok{background:#eee;border-color:#000;color:#000;}
+  .logo-sub,.sec-lbl,.code-box .cl{color:#555;}
+  td.k{color:#777;}
+  td.v{color:#000;}
+  .code-box{background:#f8f8f8;border-color:#222;}
+  .code-box::before{display:none;}
+  .code-box .cv{color:#000;text-shadow:none;}
+  .ft{background:#eee;color:#666;border-color:#ccc;}
+  .ft strong,.ft a{color:#444;}
+}
+</style>
+</head>
+<body>
+<div class="wm">STONEBRIDGE BAY RP</div>
+<div class="card">
+
+  <div class="hd">
+    <div class="logo-row">
+      <span class="logo-icon">🏙️</span>
+      <div>
+        <div class="logo-name">STONEBRIDGE <em>BAY</em> RP</div>
+        <span class="logo-sub">Certificato di Acquisto Ufficiale</span>
+      </div>
+    </div>
+    <span class="badge-ok">✓ Valida</span>
+  </div>
+
+  <div class="bd">
+
+    <span class="sec-lbl">Dettagli Acquisto</span>
+    <table>
+      <tr><td class="k">Prodotto</td>      <td class="v">${esc(products)}</td></tr>
+      <tr><td class="k">Totale pagato</td> <td class="v">${esc(total)}</td></tr>
+      <tr><td class="k">Order ID</td>      <td class="v">${esc(orderId)}</td></tr>
+      <tr><td class="k">Data acquisto</td> <td class="v">${esc(dateStr)}</td></tr>
+      <tr><td class="k">Metodo</td>        <td class="v">PayPal</td></tr>
+      <tr><td class="k">Server</td>        <td class="v">Stonebridge Bay RP — FiveM</td></tr>
+    </table>
+
+    <span class="sec-lbl">Proprietario Licenza</span>
+    <table>
+      <tr><td class="k">Discord ID</td>  <td class="v">${esc(discordId)}</td></tr>
+      <tr><td class="k">Piattaforma</td> <td class="v">Discord / FiveM GTA V RP</td></tr>
+    </table>
+
+    <div class="code-box">
+      <span class="cl">Codice Licenza Univoco</span>
+      <span class="cv">${licenseCode}</span>
+    </div>
+
+  </div>
+
+  <div class="ft">
+    <strong>COME USARE QUESTA LICENZA:</strong> Apri un ticket su Discord, allega questo file
+    e comunica allo staff il tuo Discord ID e il codice licenza sopra indicato.<br>
+    Il codice è univoco e generato al momento dell'acquisto — conservalo e non condividerlo.<br>
+    <strong>stonebridgebayrp.netlify.app</strong> ·
+    <a href="https://discord.gg/tonycodelink">discord.gg/tonycodelink</a> ·
+    Non affiliato a Rockstar Games / Take-Two Interactive.
+  </div>
+
+</div>
+<script>
+  // Apre automaticamente la finestra stampa (per salvare come PDF)
+  window.addEventListener('load', () => setTimeout(() => window.print(), 500));
+<\/script>
+</body>
+</html>`;
+
+  // Scarica il file
+  const blob = new Blob([doc], { type: 'text/html;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `licenza-SBBR-${discordId.slice(-6)}-${Date.now()}.html`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+
+  showToast('📄 Licenza scaricata! Aprila nel browser e stampala come PDF. E apri il ticket donazioni');
+}
+
+/* ─────────────────────────────────────────────────────
+   UTILITÀ
+───────────────────────────────────────────────────── */
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function confetti() {
+  const colors = ['#00f5ff','#ff2d78','#f5c400','#fff','#4ade80'];
+  for (let i = 0; i < 70; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left:${Math.random()*100}vw;top:-12px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        animation-duration:${1.8+Math.random()*2.4}s;
+        animation-delay:${Math.random()*.5}s;
+        width:${5+Math.random()*8}px;height:${5+Math.random()*8}px;
+        border-radius:${Math.random()>.5?'50%':'2px'};
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5000);
+    }, i * 35);
+  }
+}
+</script>
+</body>
+</html>
