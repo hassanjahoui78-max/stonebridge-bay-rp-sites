@@ -476,5 +476,25 @@
 <div class="toast-container" id="toast-container"></div>
 
 <script src="script.js"></script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCVSzGLYeJcaH-AJ0pY23cgkGBMk_IENVw",
+    authDomain: "stonebridge-bay-rp-sites.firebaseapp.com",
+    databaseURL: "https://stonebridge-bay-rp-sites-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "stonebridge-bay-rp-sites",
+    storageBucket: "stonebridge-bay-rp-sites.firebasestorage.app",
+    messagingSenderId: "995227869444",
+    appId: "1:995227869444:web:f15417f90f9e32a01c7051"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
 </body>
 </html>
